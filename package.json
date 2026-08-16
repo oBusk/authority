@@ -1,0 +1,92 @@
+{
+    "name": "@obusk/template-next",
+    "version": "0.1.0",
+    "private": true,
+    "description": "Github Repo template for a next.js project with linting, strictness and CI setup",
+    "keywords": [
+        "eslint",
+        "nextjs",
+        "prettier",
+        "template",
+        "typescript",
+        "vercel"
+    ],
+    "type": "module",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/oBusk/template-next.git"
+    },
+    "author": "Oscar Busk <oscar.busk@gmail.com>",
+    "license": "ISC",
+    "engines": {
+        "node": "24.x"
+    },
+    "devEngines": {
+        "runtime": {
+            "name": "node",
+            "version": "^24.19.0",
+            "onFail": "download"
+        }
+    },
+    "packageManager": "pnpm@11.21.0",
+    "simple-git-hooks": {
+        "pre-commit": "pnpm run lint-staged"
+    },
+    "lint-staged": {
+        "**/*.{ts,tsx,js,jsx}": [
+            "eslint --fix"
+        ],
+        "**/*.{md,yml,yaml,json}": [
+            "prettier --ignore-path .gitignore --ignore-path .prettierignore  --write"
+        ]
+    },
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "pretypecheck": "next typegen",
+        "typecheck": "tsc --noEmit",
+        "lint": "eslint",
+        "postlint": "pnpm run prettier",
+        "lint-fix": "eslint --fix .",
+        "prettier": "prettier **/*.{md,yml,yaml,json} --ignore-path .gitignore --ignore-path .prettierignore --check",
+        "postlint-fix": "pnpm run prettier-fix",
+        "prettier-fix": "prettier **/*.{md,yml,yaml,json} --ignore-path .gitignore --ignore-path .prettierignore --write",
+        "lint-staged": "lint-staged",
+        "pretest": "next typegen",
+        "test": "jest --watch",
+        "pretest-ci": "next typegen",
+        "test-ci": "jest --ci"
+    },
+    "dependencies": {
+        "@wrksz/themes": "2.0.0-beta.1",
+        "class-variance-authority": "^0.7.1",
+        "next": "16.3.1",
+        "react": "19.2.8",
+        "react-dom": "19.2.8",
+        "react-icons": "^5.7.0",
+        "tailwind-merge": "^3.6.0"
+    },
+    "devDependencies": {
+        "@obusk/eslint-config-next": "16.3.4",
+        "@tailwindcss/postcss": "^4.3.3",
+        "@testing-library/dom": "^10.4.1",
+        "@testing-library/jest-dom": "^7.0.1",
+        "@testing-library/react": "^16.3.2",
+        "@types/jest": "^30.0.0",
+        "@types/node": "^24.13.3",
+        "@types/react": "19.2.18",
+        "@types/react-dom": "19.2.4",
+        "babel-plugin-react-compiler": "^1.0.0",
+        "eslint": "^10.8.1",
+        "jest": "^30.4.2",
+        "jest-environment-jsdom": "^30.4.1",
+        "lint-staged": "^17.3.0",
+        "postcss": "8.5.26",
+        "prettier": "^3.9.6",
+        "simple-git-hooks": "^2.13.1",
+        "tailwindcss": "^4.3.3",
+        "ts-node": "^10.9.2",
+        "typescript": "~6.0.3"
+    }
+}
