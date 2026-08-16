@@ -1,20 +1,19 @@
 {
-    "name": "@obusk/template-next",
+    "name": "authority",
     "version": "0.1.0",
     "private": true,
-    "description": "Github Repo template for a next.js project with linting, strictness and CI setup",
+    "description": "An offline-first authority (life) counter for the Star Realms card game",
     "keywords": [
-        "eslint",
-        "nextjs",
-        "prettier",
-        "template",
-        "typescript",
-        "vercel"
+        "authority",
+        "counter",
+        "life-counter",
+        "pwa",
+        "star-realms"
     ],
     "type": "module",
     "repository": {
         "type": "git",
-        "url": "https://github.com/oBusk/template-next.git"
+        "url": "https://github.com/oBusk/authority.git"
     },
     "author": "Oscar Busk <oscar.busk@gmail.com>",
     "license": "ISC",

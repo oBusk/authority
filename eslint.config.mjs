@@ -13,6 +13,22 @@ const eslintConfig = defineConfig([
             },
         },
     },
+    {
+        // Plain script running in a ServiceWorkerGlobalScope, not a module and
+        // not part of the app bundle. `tsconfig.json` does not include it, so
+        // it is linted but never typechecked.
+        files: ["public/sw.js"],
+        languageOptions: {
+            sourceType: "script",
+            globals: {
+                self: "readonly",
+                fetch: "readonly",
+                Request: "readonly",
+                Response: "readonly",
+                URL: "readonly",
+            },
+        },
+    },
 ]);
 
 export default eslintConfig;
