@@ -43,7 +43,20 @@ export function adjustAuthority(
     return { ...state, [player]: clampAuthority(state[player] + amount) };
 }
 
-/** Formats an accumulated run of clicks, e.g. `+7` or `-3`. */
+/**
+ * How much a tap would actually move a player, once the floor at 0 is taken
+ * into account. Tapping `-` on a player who is already out changes nothing, so
+ * it must not count towards the running tally either.
+ */
+export function appliedChange(
+    state: GameState,
+    player: PlayerId,
+    amount: number,
+): number {
+    return clampAuthority(state[player] + amount) - state[player];
+}
+
+/** Formats an accumulated run of taps, e.g. `+7` or `-3`. */
 export function formatDelta(delta: number): string {
     return delta > 0 ? `+${delta}` : `${delta}`;
 }

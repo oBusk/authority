@@ -6,6 +6,7 @@ import { InlineScript } from "^/components/InlineScript";
 import { PlayerCounter } from "^/components/PlayerCounter";
 import {
     adjustAuthority,
+    appliedChange,
     type GameState,
     newGame,
     type PlayerId,
@@ -34,10 +35,18 @@ export function AuthorityBoard() {
     }, [game]);
 
     function adjust(player: PlayerId, amount: number) {
-        // The total moves in the same render as the tap; the chip is only a
-        // running tally of how many times the button has been pressed.
+        // Tally what the tap actually does, not what was asked for: at 0 a
+        // `-` tap is a no-op, and showing "-3" for three taps that changed
+        // nothing would be a lie. Derived from the committed state rather
+        // than inside the updater, which has to stay pure.
+        const applied = appliedChange(game, player, amount);
+
+        // The total moves in the same render as the tap.
         setGame((current) => adjustAuthority(current, player, amount));
-        deltas[player].add(amount);
+
+        if (applied !== 0) {
+            deltas[player].add(applied);
+        }
     }
 
     function startNewGame() {

@@ -103,6 +103,35 @@ describe("AuthorityBoard", () => {
         expect(counter("Player 1")).toHaveTextContent("0");
     });
 
+    it("only tallies taps that actually moved the total", () => {
+        window.localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify({ p1: 2, p2: 50 }),
+        );
+        render(<AuthorityBoard />);
+
+        // Five taps, but only two of them can land before the floor.
+        tap("Player 1: lose 1 authority", 5);
+
+        expect(counter("Player 1")).toHaveTextContent("0");
+        expect(screen.getByText("-2")).toBeInTheDocument();
+        expect(screen.queryByText("-5")).not.toBeInTheDocument();
+    });
+
+    it("shows no tally at all for taps against the floor", () => {
+        window.localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify({ p1: 0, p2: 50 }),
+        );
+        render(<AuthorityBoard />);
+
+        tap("Player 1: lose 1 authority", 3);
+
+        expect(counter("Player 1")).toHaveTextContent("0");
+        expect(screen.queryByText("-1")).not.toBeInTheDocument();
+        expect(screen.queryByText("-3")).not.toBeInTheDocument();
+    });
+
     it("persists every change", () => {
         render(<AuthorityBoard />);
 

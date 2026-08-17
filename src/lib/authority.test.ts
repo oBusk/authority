@@ -1,5 +1,6 @@
 import {
     adjustAuthority,
+    appliedChange,
     clampAuthority,
     formatDelta,
     newGame,
@@ -58,6 +59,26 @@ describe("adjustAuthority", () => {
         const before = newGame();
         adjustAuthority(before, "p1", 5);
         expect(before).toEqual({ p1: 50, p2: 50 });
+    });
+});
+
+describe("appliedChange", () => {
+    it("is the full amount when nothing is clamped", () => {
+        expect(appliedChange(newGame(), "p1", 7)).toBe(7);
+        expect(appliedChange(newGame(), "p1", -7)).toBe(-7);
+    });
+
+    it("is zero for a player already on zero", () => {
+        expect(appliedChange({ p1: 0, p2: 50 }, "p1", -1)).toBe(0);
+        expect(appliedChange({ p1: 0, p2: 50 }, "p1", -10)).toBe(0);
+    });
+
+    it("is only the part that fits when the floor is hit", () => {
+        expect(appliedChange({ p1: 2, p2: 50 }, "p1", -5)).toBe(-2);
+    });
+
+    it("still applies gains from zero", () => {
+        expect(appliedChange({ p1: 0, p2: 50 }, "p1", 3)).toBe(3);
     });
 });
 

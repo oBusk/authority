@@ -19,20 +19,20 @@ import { REPOSITORY_URL, SITE_NAME, SITE_TAGLINE } from "^/lib/site";
  */
 export function Header({ onNewGame }: { onNewGame: () => void }) {
     return (
-        <header className="flex shrink-0 items-center justify-between gap-3 border-b px-[max(0.75rem,2vmin)] py-[max(0.375rem,1vmin)]">
-            <div className="flex min-w-0 items-baseline gap-[max(0.5rem,1.2vmin)]">
-                <Logo className="size-[max(1.1rem,3vmin)] shrink-0 self-center" />
-                <h1 className="text-[max(0.95rem,2.4vmin)] leading-none font-semibold tracking-tight">
+        <header className="flex shrink-0 items-center justify-between gap-3 border-b px-[clamp(0.75rem,2vmin,1.25rem)] py-[clamp(0.375rem,1vmin,0.625rem)]">
+            <div className="flex min-w-0 items-baseline gap-[clamp(0.5rem,1.2vmin,0.75rem)]">
+                <Logo className="size-[clamp(1.1rem,3vmin,1.5rem)] shrink-0 self-center" />
+                <h1 className="text-[clamp(0.95rem,2.4vmin,1.25rem)] leading-none font-semibold tracking-tight">
                     {SITE_NAME}
                 </h1>
-                <p className="hidden truncate text-[max(0.75rem,1.7vmin)] leading-none text-muted-foreground sm:block">
+                <p className="hidden truncate text-[clamp(0.75rem,1.7vmin,0.95rem)] leading-none text-muted-foreground sm:block">
                     {SITE_TAGLINE}
                 </p>
             </div>
 
             <nav
                 aria-label="Game controls"
-                className="flex shrink-0 items-center gap-[max(0.125rem,0.5vmin)]"
+                className="flex shrink-0 items-center gap-[clamp(0.125rem,0.5vmin,0.375rem)]"
             >
                 <NewGameButton onConfirm={onNewGame} />
                 <ThemeToggle />
