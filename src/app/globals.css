@@ -18,6 +18,8 @@
     --color-border: hsl(var(--border));
     --color-input: hsl(var(--input));
     --color-ring: hsl(var(--ring));
+    --color-player-1: hsl(var(--player-1));
+    --color-player-2: hsl(var(--player-2));
 }
 
 /* Notches and home indicators must never cover a button. */
@@ -46,6 +48,14 @@
         --input: 0 0% 89.8%;
         --ring: 0 0% 3.9%;
         --radius: 0.5rem;
+
+        /*
+         * One colour per player, so a glance tells you whose total you are
+         * reading. Sky and amber stay distinguishable under the common forms
+         * of colour blindness, unlike the usual red/green pairing.
+         */
+        --player-1: 200 98% 39%;
+        --player-2: 26 90% 37%;
     }
 
     /*
@@ -69,6 +79,15 @@
         --border: 0 0% 12%;
         --input: 0 0% 12%;
         --ring: 0 0% 60%;
+
+        /*
+         * Deliberately not near-white. These sit well below `--foreground` in
+         * luminance, which softens the glare of a huge number on pure black
+         * and lights fewer subpixels per glyph — the totals are the largest
+         * lit area on screen, so this is where OLED power actually goes.
+         */
+        --player-1: 199 89% 74%;
+        --player-2: 43 96% 66%;
     }
 }
 

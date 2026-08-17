@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ControlStrip } from "^/components/ControlStrip";
+import { Header } from "^/components/Header";
 import { InlineScript } from "^/components/InlineScript";
 import { PlayerCounter } from "^/components/PlayerCounter";
 import {
@@ -47,22 +47,25 @@ export function AuthorityBoard() {
     }
 
     return (
-        <main className="grid h-dvh grid-cols-[1fr_auto_1fr] overflow-hidden safe-area">
-            <PlayerCounter
-                player="p1"
-                authority={game.p1}
-                delta={p1Delta}
-                onAdjust={(amount) => adjust("p1", amount)}
-            />
-            <ControlStrip onNewGame={startNewGame} />
-            <PlayerCounter
-                player="p2"
-                authority={game.p2}
-                delta={p2Delta}
-                onAdjust={(amount) => adjust("p2", amount)}
-            />
+        <div className="flex h-dvh flex-col overflow-hidden safe-area">
+            <Header onNewGame={startNewGame} />
+            {/* min-h-0 lets the counters shrink inside the flex column. */}
+            <main className="grid min-h-0 flex-1 grid-cols-2 divide-x">
+                <PlayerCounter
+                    player="p1"
+                    authority={game.p1}
+                    delta={p1Delta}
+                    onAdjust={(amount) => adjust("p1", amount)}
+                />
+                <PlayerCounter
+                    player="p2"
+                    authority={game.p2}
+                    delta={p2Delta}
+                    onAdjust={(amount) => adjust("p2", amount)}
+                />
+            </main>
             {/* Must come after the counters it patches. */}
             <InlineScript html={RESTORE_SCRIPT} />
-        </main>
+        </div>
     );
 }

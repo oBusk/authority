@@ -27,8 +27,15 @@ being asked:
 - **Dark mode is pure black** (`--background: 0 0% 0%`) so an OLED screen
   costs almost no battery over a whole game. Do not soften it to near-black.
 - **The wake lock has no toggle.** It is on wherever the browser allows it.
-- **The counter screen stays uncluttered.** Prose, branding and SEO copy
-  belong on `/about`, not on `/`.
+- **Each player has their own colour** — `--player-1` (sky) and `--player-2`
+  (amber). Sky and amber stay distinguishable under the common forms of colour
+  blindness; a red/green pairing would not. Both sit deliberately below
+  `--foreground` in luminance: the totals are the largest lit area on an OLED
+  screen, so softening them is both easier on the eye and cheaper on battery.
+  Do not "fix" them back to white.
+- **`/` carries the branding, and only the branding.** The header holds the
+  wordmark and the one-line tagline — the only crawlable copy on the counter
+  screen, and its `h1`. Anything longer belongs on `/about`.
 
 ## Conventions
 
@@ -49,6 +56,9 @@ being asked:
 
 - `src/app/page.tsx` is a static server shell. All interactivity lives in the
   `AuthorityBoard` client subtree, so `/` prerenders to complete HTML.
+- `AuthorityBoard` is a flex column: `Header` (branding + controls) above a
+  two-column `main` of `PlayerCounter`s. The controls deliberately live in the
+  header rather than in a strip between the counters.
 - **The no-flash score restore has two halves that must stay in sync:** the
   inline script from `restoreScriptSource()` in `src/lib/storage.ts` patches
   the DOM before first paint, and `AuthorityBoard`'s lazy `useState`
@@ -87,6 +97,11 @@ string for this reason. Do not add `dynamic` or `revalidate` segment configs.
   `src/components/AuthorityBoard.test.tsx`.
 - jsdom implements neither `HTMLDialogElement.showModal` nor the Wake Lock
   API. The former needs stubbing; the latter is feature-detected and no-ops.
+- Cache Components keeps the previous route mounted but hidden on a soft
+  navigation, so after clicking through to `/about` the counter screen's
+  `header` — `h1` and all — is still in the DOM. Scope browser-test selectors
+  (`main h1`, not `h1`) rather than assuming one match. A direct fetch of
+  `/about` is unaffected, so this never reaches a crawler.
 - `next/jest` does not map the `^/` alias — `jest.config.ts` does it
   explicitly.
 

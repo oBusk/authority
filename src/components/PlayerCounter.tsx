@@ -17,6 +17,15 @@ const ADJUST_BUTTON = cx(
     "focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden",
 );
 
+/**
+ * Written out in full rather than built from the player id, so Tailwind's
+ * scanner can see both class names.
+ */
+const PLAYER_TINT: Record<PlayerId, { total: string; delta: string }> = {
+    p1: { total: "text-player-1", delta: "text-player-1/70" },
+    p2: { total: "text-player-2", delta: "text-player-2/70" },
+};
+
 export interface PlayerCounterProps {
     player: PlayerId;
     authority: number;
@@ -31,6 +40,7 @@ export function PlayerCounter({
     onAdjust,
 }: PlayerCounterProps) {
     const label = PLAYER_LABELS[player];
+    const tint = PLAYER_TINT[player];
 
     return (
         <section
@@ -44,7 +54,8 @@ export function PlayerCounter({
             <span
                 aria-hidden="true"
                 className={cx(
-                    "text-muted-foreground tabular-nums",
+                    tint.delta,
+                    "tabular-nums",
                     "text-[clamp(1rem,5vmin,2rem)] leading-none font-medium",
                     // Appears instantly with the tap, then fades out slowly.
                     "transition-opacity",
@@ -65,7 +76,11 @@ export function PlayerCounter({
             <output
                 id={authorityElementId(player)}
                 suppressHydrationWarning
-                className="text-[clamp(4rem,26vmin,12rem)] leading-none font-bold tabular-nums"
+                className={cx(
+                    tint.total,
+                    "text-[clamp(4rem,26vmin,12rem)] leading-none font-bold",
+                    "tabular-nums",
+                )}
             >
                 {authority}
             </output>
