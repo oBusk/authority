@@ -6,17 +6,17 @@ importers:
   .:
     configDependencies:
       '@obusk/pnpm-plugin-defaults':
-        specifier: 0.6.2
-        version: 0.6.2
+        specifier: 0.6.4
+        version: 0.6.4
 
 packages:
 
-  '@obusk/pnpm-plugin-defaults@0.6.2':
-    resolution: {integrity: sha512-/W5+6DvMUkM95vHpwRoGMl5nsKCQgwypF9F8cIfkVgJ8plHMAVufAin5shqeESyBn/NAm08ZnOTvGwPQ4YtVKw==}
+  '@obusk/pnpm-plugin-defaults@0.6.4':
+    resolution: {integrity: sha512-LgDxg7l5XN/fstOqZBAD7JmuQU4Im2Z0Yk3K6AGkFhXUnhNZexFoEJlqW5L4jEEQ228tjD8q1z0kOvlKW0W3UA==}
 
 snapshots:
 
-  '@obusk/pnpm-plugin-defaults@0.6.2': {}
+  '@obusk/pnpm-plugin-defaults@0.6.4': {}
 
 ---
 lockfileVersion: '9.0'
