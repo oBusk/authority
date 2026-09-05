@@ -59,6 +59,7 @@
     },
     "dependencies": {
         "@vercel/analytics": "^2.0.1",
+        "@vercel/speed-insights": "^2.0.0",
         "@wrksz/themes": "2.0.0-beta.1",
         "class-variance-authority": "^0.7.1",
         "next": "16.3.4",
