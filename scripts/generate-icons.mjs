@@ -1,6 +1,7 @@
 /**
  * One-off asset generator. Rasterises `public/icons/icon.svg` into the PNG
- * set the web app manifest and iOS need, and renders the Open Graph card.
+ * set the web app manifest and iOS need, the multi-size `favicon.ico` that
+ * bare `/favicon.ico` requests want, and renders the Open Graph card.
  *
  * The output is committed, so this only needs re-running when the mark or the
  * tagline changes:
@@ -10,7 +11,7 @@
  * `sharp` is not a direct dependency — it arrives underneath `next` — so it is
  * resolved from the pnpm store rather than imported by name.
  */
-import { readdirSync, readFileSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -19,6 +20,9 @@ const require = createRequire(import.meta.url);
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const ICONS = join(ROOT, "public", "icons");
 const APP = join(ROOT, "src", "app");
+
+/** Sizes packed into `favicon.ico`, smallest first. */
+const FAVICON_SIZES = [16, 32, 48];
 
 const BLACK = { r: 0, g: 0, b: 0, alpha: 1 };
 
@@ -119,7 +123,43 @@ function openGraphSvg() {
 </svg>`);
 }
 
+/**
+ * Packs PNG images into a single `.ico` container. Every current browser
+ * accepts PNG-compressed ICO entries, so no BMP encoding is needed.
+ * @param {number[]} sizes - Square edge lengths to render and pack.
+ * @returns {Promise<Buffer>} The ICO file contents.
+ */
+async function buildIco(sizes) {
+    const pngs = await Promise.all(
+        sizes.map((size) => render(size).toBuffer()),
+    );
+
+    const header = Buffer.alloc(6);
+    header.writeUInt16LE(0, 0);
+    header.writeUInt16LE(1, 2);
+    header.writeUInt16LE(pngs.length, 4);
+
+    const directory = Buffer.alloc(16 * pngs.length);
+    let offset = header.length + directory.length;
+    pngs.forEach((png, index) => {
+        const entry = directory.subarray(index * 16, index * 16 + 16);
+        // 0 in the width/height byte means 256; our sizes stay well under it.
+        entry.writeUInt8(sizes[index] % 256, 0);
+        entry.writeUInt8(sizes[index] % 256, 1);
+        entry.writeUInt8(0, 2);
+        entry.writeUInt8(0, 3);
+        entry.writeUInt16LE(1, 4);
+        entry.writeUInt16LE(32, 6);
+        entry.writeUInt32LE(png.length, 8);
+        entry.writeUInt32LE(offset, 12);
+        offset += png.length;
+    });
+
+    return Buffer.concat([header, directory, ...pngs]);
+}
+
 const outputs = [
+    [join(APP, "favicon.ico"), await buildIco(FAVICON_SIZES)],
     [join(ICONS, "icon-192.png"), render(192)],
     [join(ICONS, "icon-512.png"), render(512)],
     [join(ICONS, "icon-maskable-512.png"), await renderInset(512, 0.7)],
@@ -133,6 +173,10 @@ const outputs = [
 ];
 
 for (const [path, image] of outputs) {
-    await image.toFile(path);
+    if (Buffer.isBuffer(image)) {
+        writeFileSync(path, image);
+    } else {
+        await image.toFile(path);
+    }
     console.log(`wrote ${path.replace(`${ROOT}/`, "")}`);
 }
