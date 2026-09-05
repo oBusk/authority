@@ -76,7 +76,7 @@
         "@types/jest": "^30.0.0",
         "@types/node": "^24.13.3",
         "@types/react": "19.2.18",
-        "@types/react-dom": "19.2.4",
+        "@types/react-dom": "19.2.5",
         "babel-plugin-react-compiler": "^1.0.0",
         "eslint": "^10.9.1",
         "jest": "^30.5.1",
