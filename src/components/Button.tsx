@@ -40,7 +40,6 @@ export function Button({
 }: ButtonProps) {
     return (
         <button
-            // eslint-disable-next-line tailwindcss/no-custom-classname -- false positive: `className` here is the identifier, not a class name
             className={cx(buttonVariants({ variant, size }), className)}
             {...props}
         >
